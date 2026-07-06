@@ -31,19 +31,6 @@ Framework files:
 
 The benchmark runner does not depend on Orthrus internals. Orthrus-specific details are isolated in the Orthrus generation mode and instrumentation.
 
-## Smoke Benchmark
-
-Smoke prompts:
-
-- `prompts/smoke_prompts_no_think.jsonl`
-
-Result:
-
-| mode | runs | mean tok/s | mean ms/token | lossless |
-|---|---:|---:|---:|---:|
-| AR baseline | 9 | 55.3399 | 18.5747 | 100% |
-| Orthrus | 9 | 55.8148 | 18.4426 | 100% |
-
 ## Partial Benchmark
 
 Prompt suite:
@@ -97,20 +84,6 @@ Metrics by dataset:
 | MATH-500 | Orthrus | 65.6134 | 15.6865 | 4.3831 | 2.6945 | 24.35 | 24.35 |
 | MBPP | AR | 58.2577 | 17.6182 | n/a | 1.0000 | 0.00 | 83.75 |
 | MBPP | Orthrus | 58.1366 | 17.7390 | 3.6858 | 2.3469 | 18.30 | 18.30 |
-
-## K Sweep Note
-
-A runtime sweep over `K = 4, 8, 16, 32` was tested by overriding `model.config.block_size`.
-
-Result:
-
-- `K=32` was lossless.
-- `K=4`, `K=8`, and `K=16` produced mismatches.
-
-Interpretation:
-
-- The current Orthrus checkpoint should be benchmarked at its native `K=32`.
-- A valid K sweep requires checkpoints or official configs trained for each K.
 
 ## Interpretation
 
