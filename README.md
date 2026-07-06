@@ -4,7 +4,7 @@ FlowDraft introduces a Categorical Flow Map (CFM) drafter for lossless parallel 
 
 The central idea is to replace Orthrus' single-step masked-diffusion drafter with a one- or few-step categorical flow map that produces a more correlated joint proposal over the token block. The intended training objective combines AR-teacher distillation with flow-map consistency, aiming to increase acceptance length and throughput at the same verification cost while preserving strict losslessness.
 
-This repository currently contains the evaluation infrastructure and Orthrus baseline harness needed to measure that goal.
+This repository contains the evaluation infrastructure, Orthrus baseline harness, and an experimental CFM drafter training path needed to measure that goal.
 
 ## Current Harness
 
@@ -14,8 +14,10 @@ This repository currently contains the evaluation infrastructure and Orthrus bas
 - wall-clock throughput and latency;
 - Orthrus acceptance length, TPF, drafter/verifier forward-pass metrics;
 - prompt and dataset benchmark support.
+- experimental CFM drafter training against a frozen AR teacher;
+- lossless CFM drafter inference mode with AR verification.
 
-The current code is an inference and evaluation harness. Training a new drafter is a separate next step.
+The CFM drafter is trained separately from the frozen AR backbone. During inference it only proposes a block; the AR verifier still determines the final output exactly.
 
 ## Current Results
 
@@ -34,6 +36,7 @@ Highlights from the current GPU runs:
 - `docs/` - short run instructions.
 - `prompts/` - smoke and synthetic prompt suites.
 - `scripts/` - local entrypoints for benchmark and environment inspection.
+- `scripts/train_cfm_drafter.py` - CFM drafter training entrypoint.
 - `reports/` - detailed run reports.
 
 ## Kaggle

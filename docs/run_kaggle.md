@@ -81,6 +81,29 @@ result = run_benchmark(load_config("/kaggle/working/config.yaml"))
 print(result)
 ```
 
+## Train CFM Drafter
+
+Train a Categorical Flow Map drafter against the frozen AR model:
+
+```bash
+python /kaggle/working/flowdraft/scripts/train_cfm_drafter.py \
+  --model chiennv/Orthrus-Qwen3-1.7B \
+  --tokenizer chiennv/Orthrus-Qwen3-1.7B \
+  --dataset-name Skylion007/openwebtext \
+  --dataset-split train \
+  --text-field text \
+  --dataset-limit 2000 \
+  --output /kaggle/working/cfm_drafter.pt \
+  --context-length 512 \
+  --block-size 32 \
+  --num-samples 4096 \
+  --batch-size 1 \
+  --steps 1000 \
+  --model-dtype float16
+```
+
+Benchmark it with `configs/bench_cfm.yaml` after building `/kaggle/working/dataset_prompts.jsonl`.
+
 ## Outputs
 
 Results are written to `output_dir`:
