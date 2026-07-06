@@ -31,14 +31,9 @@ Highlights from the current GPU runs:
 
 - `benchfw/` - benchmark framework and generation modes.
 - `configs/` - environment-independent benchmark configs.
-- `docs/` - safe run instructions.
 - `prompts/` - smoke and synthetic prompt suites.
 - `scripts/` - local entrypoints for benchmark and environment inspection.
 - `reports/` - detailed run reports.
-
-## Running on Kaggle
-
-See [docs/kaggle.md](docs/kaggle.md). The guide intentionally avoids private usernames, kernel IDs, tokens, and generated outputs.
 
 ## Local Checks
 
