@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Local/generated inspection assets
+datasets.jpg
+reports/modeling_orthrus_hf_snapshot.py
+
+# Environment and editor files
+.env
+.venv/
+venv/
+.DS_Store
+.idea/
+.vscode/
