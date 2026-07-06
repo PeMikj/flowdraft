@@ -3,11 +3,14 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import sys
 from pathlib import Path
 from typing import Any
 
 import torch
 from torch.utils.data import DataLoader, Dataset
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from benchfw.cfm_drafter import build_cfm_drafter_from_model
 from benchfw.model_loading import load_model_and_tokenizer
