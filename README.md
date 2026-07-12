@@ -48,13 +48,39 @@ The CFM drafter is trained separately from the frozen AR backbone. During infere
 
 ## Current Results
 
-See [reports/orthrus_baseline_v1_report.md](reports/orthrus_baseline_v1_report.md).
+All runs use greedy decoding (`temperature=0`) and `K=32`. Each dataset row contains the first 20
+examples from its test split. Absolute throughput is not directly comparable across the two model
+tables because the 1.7B checkpoint ran on a P100 while the reproduced 0.6B adapter ran on a T4.
 
-Highlights from the current GPU runs:
+### Released Orthrus Qwen3-1.7B checkpoint (P100)
 
-- Orthrus exact-match losslessness passed on smoke prompts, synthetic benchmark prompts, and dataset subsets.
-- Dataset benchmark covered GSM8K, HumanEval, MATH-500, and MBPP subsets.
-- Orthrus improved TPF versus AR, while wall-clock throughput on the tested P100 GPU remained roughly flat.
+| Dataset | AR tok/s | Orthrus tok/s | Acceptance | TPF | Token match |
+|---|---:|---:|---:|---:|---:|
+| GSM8K | 56.8497 | 57.2229 | 3.6128 | 2.3135 | 100% |
+| HumanEval | 66.2326 | 66.6569 | 4.6528 | 2.8124 | 100% |
+| MATH-500 | 65.4589 | 65.6134 | 4.3831 | 2.6945 | 100% |
+| MBPP | 58.2577 | 58.1366 | 3.6858 | 2.3469 | 100% |
+| **Overall** | **61.6997** | **61.9074** | **4.0836** | **2.5418** | **100%** |
+
+### Reproduced Qwen3-0.6B adapter (T4)
+
+| Dataset | AR tok/s | Orthrus tok/s | Acceptance | TPF | Token match |
+|---|---:|---:|---:|---:|---:|
+| GSM8K | 24.7430 | 29.6385 | 1.7780 | 1.3928 | 75% |
+| HumanEval | 24.8156 | 33.6082 | 2.2214 | 1.6033 | 95% |
+| MATH-500 | 23.6689 | 26.8725 | 1.6220 | 1.3165 | 85% |
+| MBPP | 24.7678 | 31.8111 | 2.1187 | 1.5393 | 95% |
+| **Overall** | **24.4988** | **30.4825** | **1.9350** | **1.4630** | **87.5%** |
+
+The 0.6B dataset-subset throughput is preliminary: batched FP16 verification diverged from
+token-by-token AR on 10 of 80 generations. On the shorter 24-prompt internal benchmark, the same
+adapter achieved 28.7691 tok/s versus 24.7809 tok/s for AR, acceptance 1.7567, TPF 1.3815, and a
+100% exact token match.
+
+Detailed reports:
+
+- [released 1.7B baseline](reports/orthrus_baseline_v1_report.md)
+- [reproduced 0.6B adapter](reports/orthrus_qwen3_06b_report.md)
 
 ## Structure
 
