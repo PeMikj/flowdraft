@@ -6,6 +6,33 @@ The central idea is to replace Orthrus' single-step masked-diffusion drafter wit
 
 This repository contains the evaluation infrastructure, Orthrus baseline harness, and an experimental CFM drafter training path needed to measure that goal.
 
+## Install
+
+```bash
+git clone https://github.com/PeMikj/flowdraft.git
+cd flowdraft
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Reproduce Qwen3-0.6B
+
+The exact training command and benchmark command are in
+[`configs/orthrus_qwen3_06b_training.md`](configs/orthrus_qwen3_06b_training.md).
+
+Build the four-dataset prompt subset with:
+
+```bash
+python scripts/build_dataset_prompts.py \
+  --output dataset_prompts.jsonl \
+  --max-per-dataset 20
+```
+
+Training produces a diffusion-only adapter checkpoint. Benchmarking loads the frozen Qwen backbone,
+applies that adapter, warms up both inference paths, and reports acceptance length, TPF, wall-clock
+throughput, forward-pass counts, and exact token-ID matches.
+
 ## Current Harness
 
 - standard autoregressive decoding;
@@ -37,6 +64,8 @@ Highlights from the current GPU runs:
 - `prompts/` - smoke and synthetic prompt suites.
 - `scripts/` - local entrypoints for benchmark and environment inspection.
 - `scripts/train_cfm_drafter.py` - CFM drafter training entrypoint.
+- `scripts/train_orthrus_drafter.py` - Qwen3 Orthrus drafter training entrypoint.
+- `scripts/benchmark_orthrus_drafter.py` - AR versus reproduced Orthrus benchmark.
 - `reports/` - detailed run reports.
 
 ## Kaggle

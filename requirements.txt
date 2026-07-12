@@ -1,0 +1,7 @@
+torch>=2.5
+transformers==5.0.0
+datasets>=2.20
+accelerate
+pyyaml
+sentencepiece
+safetensors
