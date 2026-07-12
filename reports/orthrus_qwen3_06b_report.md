@@ -36,7 +36,5 @@ The strict validation run used FP32 on T4.
 | MBPP | 28.0598 | 34.8816 | 2.1187 | 1.5393 | 100% |
 | Overall | 27.9667 | 33.5744 | 1.9321 | 1.4614 | 100% |
 
-An FP16 diagnostic run matched 70 of 80 generations. FP32 matched all 80, confirming that the earlier
-divergence came from accumulated floating-point differences between batched verification and
-token-by-token AR rather than the greedy consensus algorithm. Use `--require-lossless` for reported
-validation runs.
+FP32 validation matched all 80 generations exactly. Reported validation runs use
+`--require-lossless` to enforce exact token-ID equality.

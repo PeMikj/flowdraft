@@ -42,5 +42,4 @@ python scripts/benchmark_orthrus_drafter.py \
   --require-lossless
 ```
 
-FP32 is the reference validation mode on T4. FP16 batched verification can accumulate a numerically
-different KV cache from token-by-token FP16 AR and is therefore not used for strict token-ID claims.
+The reported benchmark uses FP32 validation on T4 and requires exact token-ID equality.

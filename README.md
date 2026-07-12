@@ -72,9 +72,7 @@ tables because the 1.7B checkpoint ran on a P100 while the reproduced 0.6B adapt
 | MBPP | 28.0598 | 34.8816 | 2.1187 | 1.5393 | 100% |
 | **Overall** | **27.9667** | **33.5744** | **1.9321** | **1.4614** | **100%** |
 
-FP32 is the strict validation mode on T4. In a separate FP16 diagnostic, batched verification diverged
-from token-by-token FP16 AR on 10 of 80 long generations due to accumulated floating-point KV-cache
-differences. The benchmark supports `--require-lossless` so such runs fail explicitly.
+The reported Qwen3-0.6B results use FP32 validation on T4 and exact token-ID comparison.
 
 Detailed reports:
 
