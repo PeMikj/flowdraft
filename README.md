@@ -62,20 +62,19 @@ tables because the 1.7B checkpoint ran on a P100 while the reproduced 0.6B adapt
 | MBPP | 58.2577 | 58.1366 | 3.6858 | 2.3469 | 100% |
 | **Overall** | **61.6997** | **61.9074** | **4.0836** | **2.5418** | **100%** |
 
-### Reproduced Qwen3-0.6B adapter (T4)
+### Reproduced Qwen3-0.6B adapter (T4, FP32 validation)
 
 | Dataset | AR tok/s | Orthrus tok/s | Acceptance | TPF | Token match |
 |---|---:|---:|---:|---:|---:|
-| GSM8K | 24.7430 | 29.6385 | 1.7780 | 1.3928 | 75% |
-| HumanEval | 24.8156 | 33.6082 | 2.2214 | 1.6033 | 95% |
-| MATH-500 | 23.6689 | 26.8725 | 1.6220 | 1.3165 | 85% |
-| MBPP | 24.7678 | 31.8111 | 2.1187 | 1.5393 | 95% |
-| **Overall** | **24.4988** | **30.4825** | **1.9350** | **1.4630** | **87.5%** |
+| GSM8K | 27.9976 | 32.0630 | 1.7523 | 1.3794 | 100% |
+| HumanEval | 27.9734 | 36.7441 | 2.2202 | 1.6033 | 100% |
+| MATH-500 | 27.8361 | 30.6088 | 1.6373 | 1.3236 | 100% |
+| MBPP | 28.0598 | 34.8816 | 2.1187 | 1.5393 | 100% |
+| **Overall** | **27.9667** | **33.5744** | **1.9321** | **1.4614** | **100%** |
 
-The 0.6B dataset-subset throughput is preliminary: batched FP16 verification diverged from
-token-by-token AR on 10 of 80 generations. On the shorter 24-prompt internal benchmark, the same
-adapter achieved 28.7691 tok/s versus 24.7809 tok/s for AR, acceptance 1.7567, TPF 1.3815, and a
-100% exact token match.
+FP32 is the strict validation mode on T4. In a separate FP16 diagnostic, batched verification diverged
+from token-by-token FP16 AR on 10 of 80 long generations due to accumulated floating-point KV-cache
+differences. The benchmark supports `--require-lossless` so such runs fail explicitly.
 
 Detailed reports:
 

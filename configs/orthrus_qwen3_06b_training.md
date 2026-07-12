@@ -37,5 +37,10 @@ python scripts/benchmark_orthrus_drafter.py \
   --checkpoint orthrus_qwen3_06b_k32_causal_adapter.pt \
   --prompts dataset_prompts.jsonl \
   --output-dir outputs/orthrus_qwen3_06b_dataset \
-  --max-new-tokens 128
+  --max-new-tokens 128 \
+  --dtype float32 \
+  --require-lossless
 ```
+
+FP32 is the reference validation mode on T4. FP16 batched verification can accumulate a numerically
+different KV cache from token-by-token FP16 AR and is therefore not used for strict token-ID claims.

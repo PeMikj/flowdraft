@@ -79,11 +79,16 @@ def main() -> None:
     parser.add_argument("--prompts", required=True)
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--max-new-tokens", type=int, default=128)
-    parser.add_argument("--dtype", choices=["float16", "bfloat16"], default="float16")
+    parser.add_argument("--dtype", choices=["float16", "bfloat16", "float32"], default="float32")
+    parser.add_argument("--require-lossless", action="store_true")
     parser.add_argument("--device", default="cuda")
     args = parser.parse_args()
 
-    dtype = {"float16": torch.float16, "bfloat16": torch.bfloat16}[args.dtype]
+    dtype = {
+        "float16": torch.float16,
+        "bfloat16": torch.bfloat16,
+        "float32": torch.float32,
+    }[args.dtype]
     model, tokenizer = load_orthrus_adapter(args.model, args.checkpoint, dtype=dtype, device=args.device)
     prompts = read_prompts(args.prompts)
     output_dir = Path(args.output_dir)
@@ -138,6 +143,9 @@ def main() -> None:
     write_csv(output_dir / "summary.csv", summary)
     write_csv(output_dir / "dataset_summary.csv", dataset_summary)
     print(json.dumps({"summary": summary, "dataset_summary": dataset_summary}, indent=2), flush=True)
+    mismatches = [row for row in rows if row["mode"] == "orthrus_adapter" and not row["lossless_match"]]
+    if args.require_lossless and mismatches:
+        raise RuntimeError(f"strict losslessness failed for {len(mismatches)} prompts")
 
 
 if __name__ == "__main__":

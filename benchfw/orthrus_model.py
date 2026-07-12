@@ -301,14 +301,25 @@ class OrthrusModel(Qwen3PreTrainedModel):
         if is_diffusion_pass:
             causal_mask = attention_mask
         else:
-            target_length = int(cache_position[-1].item()) + 1
-            causal_mask = build_dense_causal_mask(
-                position_ids=position_ids,
-                target_length=target_length,
-                dtype=inputs_embeds.dtype,
-                device=inputs_embeds.device,
-                attention_mask=attention_mask,
-            )
+            try:
+                from transformers.masking_utils import create_causal_mask
+
+                causal_mask = create_causal_mask(
+                    config=self.config,
+                    inputs_embeds=inputs_embeds,
+                    attention_mask=attention_mask,
+                    past_key_values=past_key_values,
+                    position_ids=position_ids,
+                )
+            except (ImportError, AttributeError, TypeError):
+                target_length = int(cache_position[-1].item()) + 1
+                causal_mask = build_dense_causal_mask(
+                    position_ids=position_ids,
+                    target_length=target_length,
+                    dtype=inputs_embeds.dtype,
+                    device=inputs_embeds.device,
+                    attention_mask=attention_mask,
+                )
 
         for decoder_layer in self.layers:
             hidden_states = decoder_layer(

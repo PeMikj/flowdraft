@@ -26,14 +26,17 @@ The 24-prompt greedy benchmark used one warmup for both paths and generated up t
 The benchmark selected the first 20 test rows from GSM8K, HumanEval, MATH-500, and MBPP and
 generated up to 128 tokens at temperature 0.
 
+The strict validation run used FP32 on T4.
+
 | dataset | AR tok/s | Orthrus tok/s | acceptance | TPF | strict token match |
 |---|---:|---:|---:|---:|---:|
-| GSM8K | 24.7430 | 29.6385 | 1.7780 | 1.3928 | 75% |
-| HumanEval | 24.8156 | 33.6082 | 2.2214 | 1.6033 | 95% |
-| MATH-500 | 23.6689 | 26.8725 | 1.6220 | 1.3165 | 85% |
-| MBPP | 24.7678 | 31.8111 | 2.1187 | 1.5393 | 95% |
-| Overall | 24.4988 | 30.4825 | 1.9350 | 1.4630 | 87.5% |
+| GSM8K | 27.9976 | 32.0630 | 1.7523 | 1.3794 | 100% |
+| HumanEval | 27.9734 | 36.7441 | 2.2202 | 1.6033 | 100% |
+| MATH-500 | 27.8361 | 30.6088 | 1.6373 | 1.3236 | 100% |
+| MBPP | 28.0598 | 34.8816 | 2.1187 | 1.5393 | 100% |
+| Overall | 27.9667 | 33.5744 | 1.9321 | 1.4614 | 100% |
 
-The dataset-subset throughput is preliminary. Batched FP16 verification diverged from token-by-token
-AR on 10 of 80 generations, so it must not be presented as a strict lossless result. The benchmark
-retains exact token-ID checks to expose this condition rather than hiding it.
+An FP16 diagnostic run matched 70 of 80 generations. FP32 matched all 80, confirming that the earlier
+divergence came from accumulated floating-point differences between batched verification and
+token-by-token AR rather than the greedy consensus algorithm. Use `--require-lossless` for reported
+validation runs.
