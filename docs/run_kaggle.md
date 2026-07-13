@@ -17,7 +17,12 @@ Install dependencies:
 pip install -q transformers accelerate safetensors pyyaml datasets
 ```
 
-If the default PyTorch build does not work with the allocated GPU, install a compatible PyTorch build first, then rerun the dependency install.
+If Kaggle allocates a P100 and PyTorch reports `no kernel image is available for execution on the device`, install a PyTorch build that still supports that GPU, then rerun the dependency install:
+
+```bash
+pip install -q --force-reinstall torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu121
+pip install -q transformers accelerate safetensors pyyaml datasets
+```
 
 ## Dataset Prompts
 
@@ -83,26 +88,27 @@ print(result)
 
 ## Train CFM Drafter
 
-Train a Categorical Flow Map drafter against the frozen AR model:
+Train the Categorical Flow Map drafter over the Orthrus diffusion attention and
+shared AR KV cache:
 
 ```bash
-python /kaggle/working/flowdraft/scripts/train_cfm_drafter.py \
-  --model chiennv/Orthrus-Qwen3-1.7B \
-  --tokenizer chiennv/Orthrus-Qwen3-1.7B \
-  --dataset-name Skylion007/openwebtext \
-  --dataset-split train \
+python /kaggle/working/flowdraft/scripts/train_orthrus_cfm.py \
+  --model Qwen/Qwen3-0.6B \
+  --dataset-spec Salesforce/wikitext:wikitext-2-raw-v1:train \
   --text-field text \
-  --dataset-limit 2000 \
-  --output /kaggle/working/cfm_drafter.pt \
-  --context-length 512 \
+  --dataset-limit 20000 \
+  --output /kaggle/working/orthrus_cfm.pt \
+  --sequence-length 512 \
+  --context-length 64 \
   --block-size 32 \
-  --num-samples 4096 \
+  --num-samples 10000 \
   --batch-size 1 \
   --steps 1000 \
   --model-dtype float16
 ```
 
-Benchmark it with `configs/bench_cfm.yaml` after building `/kaggle/working/dataset_prompts.jsonl`.
+Benchmark it against AR with `scripts/benchmark_orthrus_cfm.py` after building
+`/kaggle/working/dataset_prompts.jsonl`.
 
 ## Outputs
 

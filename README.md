@@ -86,9 +86,11 @@ Detailed reports:
 - `docs/` - short run instructions.
 - `prompts/` - smoke and synthetic prompt suites.
 - `scripts/` - local entrypoints for benchmark and environment inspection.
-- `scripts/train_cfm_drafter.py` - CFM drafter training entrypoint.
 - `scripts/train_orthrus_drafter.py` - Qwen3 Orthrus drafter training entrypoint.
 - `scripts/benchmark_orthrus_drafter.py` - AR versus reproduced Orthrus benchmark.
+- `benchfw/orthrus_cfm.py` - Categorical Flow Map drafter over the Orthrus diffusion attention and shared AR KV cache.
+- `scripts/train_orthrus_cfm.py` - CFM drafter training entrypoint (frozen-AR distillation + flow-map consistency).
+- `scripts/benchmark_orthrus_cfm.py` - AR versus CFM drafter benchmark with lossless AR verification.
 - `reports/` - detailed run reports.
 
 ## Kaggle
